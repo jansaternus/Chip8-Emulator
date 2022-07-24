@@ -23,7 +23,7 @@ TSPoint tp;
 #define RAM_POS_X 456
 #define RAM_POS_Y 24
 #define RAM_WIDTH 16
-#define RAM_HEIGHT 256
+#define RAM_HEIGHT 128
 
 void setup() {
   Serial.begin(9600);
@@ -32,11 +32,11 @@ void setup() {
   tft.begin(id);
   tft.setRotation(1);
   tft.fillScreen(BLACK);
+  renderMemory();
 
   
-  tft.fillRect(100, 100, 1, 1, 0x5F36);
-  ramByteWrite(0x200, 0x4356);
-  Serial.println(ramByteRead(0x200), HEX);
+  //ramByteWrite(0x200, random(65536));
+  //Serial.println(ramByteRead(0x200), HEX);
   
 
 }
@@ -57,4 +57,11 @@ void ramByteWrite(int addr, short value){
  int x = RAM_POS_X + addr%RAM_WIDTH;
  int y = RAM_POS_Y + round(addr/RAM_WIDTH);
  tft.fillRect(x,y,1,1,value);
+}
+
+void renderMemory(){
+  tft.fillRect(RAM_POS_X - 1, RAM_POS_Y - 1, RAM_WIDTH + 2, RAM_HEIGHT + 2, WHITE);
+  for(int i = 0; i < 2048; i++){
+    ramByteWrite(i, 0);
+  }
 }
